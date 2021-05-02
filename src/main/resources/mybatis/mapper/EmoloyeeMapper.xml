@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zsystem.mapper.EmployeeMapper">
+
+    <resultMap id="EmployeeMap" type="Employee">
+        <id property="id" column="eid"></id>
+        <result property="lastName" column="lastname"/>
+        <result property="email" column="email"/>
+        <result property="gender" column="gender"/>
+        <result property="birth" column="birth"/>
+        <result property="departmentId" column="department_id"/>
+        <association property="eDepartment" javaType="Department">
+            <id property="id" column="did"></id>
+            <result property="departmentName" column="dname"></result>
+        </association>
+    </resultMap>
+
+    <select id="getAllEmployee" resultMap="EmployeeMap">
+        select e.id as eid,lastname,email,gender,birth,d.departmentName as dname
+        from employee as e ,department as d where d.id = e.department_id
+  </select>
+
+    <select id="getEmployeeById" resultType="Employee">
+       select * from employee where id = #{id}
+  </select>
+
+    <insert id="saveEmployee" parameterType="Employee">
+        insert into employee (lastname,email,gender,department_id,birth)
+        values (#{lastName},#{email},#{gender},#{departmentId},#{birth})
+  </insert>
+
+    <update id="updateEmployee" parameterType="Employee">
+        update employee set lastname=#{lastName},email=#{email},gender=#{gender},department_id=#{departmentId},birth=#{birth} where id = #{id}
+  </update>
+
+    <delete id="deleteEmployeeById" parameterType="int">
+        delete from employee  where id = #{id}
+  </delete>
+
+
+
+</mapper>
